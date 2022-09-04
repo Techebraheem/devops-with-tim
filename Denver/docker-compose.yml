@@ -7,28 +7,31 @@ services:
             - flask
         volumes:
             - ./nginx.conf:/etc/nginx/conf.d/defult.conf
-        networks:
-            - my-network
+ #       networks:
+  #          - my-network
         ports:
             - 80:80
-        
+
     flask:
-        build: 
+        build:
             context: ./
             dockerfile: Dockerfile
-        image: flask:0.0.1
-        container_name: flask
+        image: flask:latest
+        container_name: flask-app
         volumes:
             - ./:/code/
         environment:
-            - FLASK_APP=code/main.py
-        command: flask run --host=0.0.0.0
+            - FLASK_APP=main.py
+        command: python main.py
         networks:
             my-network:
                 aliases:
                     - FLASK_APP
         ports:
             - 8080:5000
-        
+
 networks:
     my-network:
+
+
+

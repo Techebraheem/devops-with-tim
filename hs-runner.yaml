@@ -1,0 +1,28 @@
+apiVersion: actions.summerwind.dev/v1alpha1
+kind: RunnerDeployment
+metadata:
+  name: hostspace-runner
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: nginx    
+spec:
+  destination:
+    namespace: hostspace-runner
+    server: https://kubernetes.default.svc
+  project: default
+  sources:
+  - repoURL: git@github.com:Timtech4u/devops-playground.git
+    targetRevision: HEAD
+    ref: timtechRepo
+  - repoURL: https://github.com/hostspaceng/heliumplus
+   # chart: actions-runner-controller
+   # targetRevision: 0.23.1       
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+   # - Replace=true
